@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ContactManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContactDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactName" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="JobTitle" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="LastDateContacted" Type="date" />
+          <Property Name="Comments" Type="varchar" MaxLength="200" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LastUpdated" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_ContactDetails_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="ContactDetails" Type="Self.ContactDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="ContactDetails">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContactDetails_ContactDetails">
+          <End Role="ContactDetails" Type="Self.ContactDetails" Multiplicity="1" />
+          <End Role="ContactDetails1" Type="Self.ContactDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ContactDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContactDetails1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactManagementModelStoreContainer">
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContactDetails" EntityType="Self.ContactDetails" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ContactDetails_Company" Association="Self.FK_ContactDetails_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="ContactDetails" EntitySet="ContactDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContactDetails_ContactDetails" Association="Self.FK_ContactDetails_ContactDetails">
+            <End Role="ContactDetails" EntitySet="ContactDetails" />
+            <End Role="ContactDetails1" EntitySet="ContactDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContactManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ContactDetails" Relationship="Self.FK_ContactDetails_Company" FromRole="Company" ToRole="ContactDetails" />
+        </EntityType>
+        <EntityType Name="ContactDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="JobTitle" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastDateContacted" Type="DateTime" Precision="0" />
+          <Property Name="Comments" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_ContactDetails_Company" FromRole="ContactDetails" ToRole="Company" />
+          <NavigationProperty Name="ContactDetails1" Relationship="Self.FK_ContactDetails_ContactDetails" FromRole="ContactDetails" ToRole="ContactDetails1" />
+          <NavigationProperty Name="ContactDetail1" Relationship="Self.FK_ContactDetails_ContactDetails" FromRole="ContactDetails1" ToRole="ContactDetails" />
+        </EntityType>
+        <Association Name="FK_ContactDetails_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="ContactDetails" Type="Self.ContactDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="ContactDetails">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContactDetails_ContactDetails">
+          <End Role="ContactDetails" Type="Self.ContactDetail" Multiplicity="1" />
+          <End Role="ContactDetails1" Type="Self.ContactDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ContactDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContactDetails1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="ContactDetails" EntityType="Self.ContactDetail" />
+          <AssociationSet Name="FK_ContactDetails_Company" Association="Self.FK_ContactDetails_Company">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="ContactDetails" EntitySet="ContactDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContactDetails_ContactDetails" Association="Self.FK_ContactDetails_ContactDetails">
+            <End Role="ContactDetails" EntitySet="ContactDetails" />
+            <End Role="ContactDetails1" EntitySet="ContactDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ContactManagementModelStoreContainer" CdmEntityContainer="ContactManagementEntities">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="ContactManagementModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContactDetails">
+            <EntityTypeMapping TypeName="ContactManagementModel.ContactDetail">
+              <MappingFragment StoreEntitySet="ContactDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastDateContacted" ColumnName="LastDateContacted" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
