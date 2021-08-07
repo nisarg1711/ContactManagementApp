@@ -1,12 +1,10 @@
 ﻿using ContactManagement.Data.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContactManagement.Data
 {
+    /// <summary>
+    /// This is the ContextManager class to call the database from EF
+    /// </summary>
     public class ContextManager : IContextManager
     {
         private ContactManagementEntities _dbContext;
