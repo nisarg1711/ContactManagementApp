@@ -1,21 +1,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactManagement
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        public Startup(IHostEnvironment _environment)
         {
-            Configuration = configuration;
+            //Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                        .SetBasePath(_environment.ContentRootPath)
+                        .AddJsonFile("appsettings.json")
+                        .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +25,9 @@ namespace ContactManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            string conStr = Configuration.GetConnectionString("ContactDBEntities");
+            services.AddDbContext<DbContext>(options => options.UseSqlServer(conStr));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +43,7 @@ namespace ContactManagement
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -50,7 +55,7 @@ namespace ContactManagement
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Contact}/{action=Index}/{id?}");
             });
         }
     }

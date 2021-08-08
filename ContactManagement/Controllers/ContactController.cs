@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ContactManagement.Data;
+using ContactManagement.Data.Providers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.RegularExpressions;
 
 namespace ContactManagement.Controllers
 {
     public class ContactController : Controller
     {
+        ContactProvider contactProvider = new ContactProvider(new ContactDBEntities());
+        CompanyProvider companyProvider = new CompanyProvider(new ContactDBEntities());
+
         // GET: ContactController
         public ActionResult Index()
         {
-            return View();
+            return View(contactProvider.GetAllContactList());
         }
 
         // GET: ContactController/Details/5
@@ -21,46 +24,110 @@ namespace ContactManagement.Controllers
             return View();
         }
 
-        // GET: ContactController/Create
+        // GET: ContactController/Create       
         public ActionResult Create()
         {
-            return View();
+            ContactDetail contactDetailModel = new ContactDetail();
+
+            TempData["CompanyList"] = contactDetailModel.Companies = new SelectList(companyProvider.GetCompanyList(), "CompanyId", "CompanyName");
+
+            return View(contactDetailModel);
         }
 
         // POST: ContactController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(ContactDetail contactModel)
         {
-            try
+            if (string.IsNullOrEmpty(contactModel.ContactName))
             {
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("ContactName", "Contact Name is required");
             }
-            catch
+
+            if (string.IsNullOrEmpty(contactModel.JobTitle))
             {
-                return View();
+                ModelState.AddModelError("JobTitle", "Job Title is required");
             }
+                   
+            if (!string.IsNullOrEmpty(contactModel.Email))
+            {
+                string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                                         @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                                            @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+
+                Regex re = new Regex(emailRegex);
+
+                if (!re.IsMatch(contactModel.Email))
+                {
+                    ModelState.AddModelError("Email", "Email Address is not valid");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("Email", "Email Address is required");
+            }
+
+            if (!string.IsNullOrEmpty(contactModel.Phone))
+            {
+                string emailRegex = @"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}";
+
+                Regex re = new Regex(emailRegex);
+
+                if (!re.IsMatch(contactModel.Phone))
+                {
+                    ModelState.AddModelError("Phone", "Phone Number is not valid");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("Phone", "Phone Number is required");
+            }
+
+            if (ModelState.IsValid)
+            {
+                contactProvider.SaveContact(contactModel);
+                return RedirectToAction("Index");
+            }
+            TempData["CompanyList"] = new SelectList(companyProvider.GetCompanyList(), "CompanyId", "CompanyName");
+
+            return View(contactModel);
         }
 
-        // GET: HomeController1/Edit/5
+        // GET: ContactController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ContactDetail contact = contactProvider.FindContact(id);
+            TempData["CompanyList"] = new SelectList(companyProvider.GetCompanyList(), "CompanyId", "CompanyName");
+
+            //if (zone == null)
+            //{
+            //    return HttpNotFound();
+            //}
+
+            return View(contact);
         }
 
         // POST: ContactController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ContactDetail contactDetail)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    contactProvider.UpdateContactDetails(contactDetail);
+                    //db.Entry(zone).State = EntityState.Modified;
+                    //db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View();
+                
             }
+
+            return View();
         }
 
         // GET: ContactController/Delete/5
