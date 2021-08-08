@@ -6,6 +6,6 @@
     /// </summary>
     interface IContextManager
     {
-        ContactManagementEntities DBContext { get; }
+        ContactDBEntities DBContext { get; }
     }
 }

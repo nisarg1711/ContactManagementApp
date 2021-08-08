@@ -7,14 +7,14 @@ namespace ContactManagement.Data
     /// </summary>
     public class ContextManager : IContextManager
     {
-        private ContactManagementEntities _dbContext;
+        private ContactDBEntities _dbContext;
 
-        public ContactManagementEntities DBContext
+        public ContactDBEntities DBContext
         {
             get
             {
                 if (_dbContext == null)
-                    _dbContext = new ContactManagementEntities();
+                    _dbContext = new ContactDBEntities();
 
                 return _dbContext;
             }

@@ -9,9 +9,11 @@
 
 namespace ContactManagement.Data
 {
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ContactDetail
     {
         public int Id { get; set; }
@@ -29,5 +31,7 @@ namespace ContactManagement.Data
         public virtual Company Company { get; set; }
         public virtual ContactDetail ContactDetails1 { get; set; }
         public virtual ContactDetail ContactDetail1 { get; set; }
+
+        public SelectList Companies { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace ContactManagement.Data
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ContactManagementEntities : DbContext
+    public partial class ContactDBEntities : DbContext
     {
-        public ContactManagementEntities()
-            : base("name=ContactManagementEntities")
+        public ContactDBEntities()
+            : base("name=ContactDBEntities")
         {
         }
     

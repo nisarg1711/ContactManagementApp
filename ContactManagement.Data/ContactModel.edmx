@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ContactManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ContactModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="CompanyId" />
@@ -52,7 +52,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ContactManagementModelStoreContainer">
+        <EntityContainer Name="ContactModelStoreContainer">
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContactDetails" EntityType="Self.ContactDetails" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ContactDetails_Company" Association="Self.FK_ContactDetails_Company">
@@ -68,7 +68,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ContactManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ContactModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="CompanyId" />
@@ -120,7 +120,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ContactManagementEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ContactDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Companies" EntityType="Self.Company" />
           <EntitySet Name="ContactDetails" EntityType="Self.ContactDetail" />
           <AssociationSet Name="FK_ContactDetails_Company" Association="Self.FK_ContactDetails_Company">
@@ -137,9 +137,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ContactManagementModelStoreContainer" CdmEntityContainer="ContactManagementEntities">
+        <EntityContainerMapping StorageEntityContainer="ContactModelStoreContainer" CdmEntityContainer="ContactDBEntities">
           <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="ContactManagementModel.Company">
+            <EntityTypeMapping TypeName="ContactModel.Company">
               <MappingFragment StoreEntitySet="Company">
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
@@ -147,7 +147,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ContactDetails">
-            <EntityTypeMapping TypeName="ContactManagementModel.ContactDetail">
+            <EntityTypeMapping TypeName="ContactModel.ContactDetail">
               <MappingFragment StoreEntitySet="ContactDetails">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />
