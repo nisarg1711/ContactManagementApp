@@ -16,7 +16,7 @@ namespace ContactManagement.Data.Providers
         /// </summary>
         /// <param name="contactDetail"></param>
         /// <returns></returns>
-        public ContactDetail SaveContact(ContactDetail contactDetail)
+        public int SaveContact(ContactDetail contactDetail)
         {
             ContactDetail existingContactDetail = FindContact(contactDetail?.Id);
 
@@ -24,14 +24,10 @@ namespace ContactManagement.Data.Providers
             {
                 contactEntities.ContactDetails.Add(contactDetail);
             }
-            else
-            {
-                contactDetail = existingContactDetail;
-            }
+         
+            int rowsCommitted = contactEntities.SaveChanges();
 
-            contactEntities.SaveChanges();
-
-            return contactDetail;
+            return rowsCommitted;
         }
 
         public ContactDetail UpdateContactDetails(ContactDetail contactDetail)

@@ -16,15 +16,20 @@ namespace ContactManagement.Data
     public partial class ContactDBEntities : DbContext
     {
         public ContactDBEntities()
-            : base("name=ContactDBEntities")
+            : base("ContactDBEntities")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ContactDetail>().HasKey(x => new { x.Id});
+            //modelBuilder.Entity<ContactDetail>()
+            //.HasOptional(p => p.Company)
+            //.WithOptionalPrincipal(o => o.CompanyId)
+            //.Map(x => x.MapKey("CompanyId"));
         }
-    
+
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<ContactDetail> ContactDetails { get; set; }
     }
