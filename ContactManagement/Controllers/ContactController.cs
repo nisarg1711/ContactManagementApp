@@ -63,6 +63,11 @@ namespace ContactManagement.Controllers
                 ModelState.AddModelError(error.Item1, error.Item2);
             }
 
+            if (validationErrors.Count == 0)
+            {
+                ModelState.Clear();
+            }
+
             if (ModelState.IsValid)
             {
                 int result = contactProvider.SaveContact(contactModel);

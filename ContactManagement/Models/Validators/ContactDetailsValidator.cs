@@ -35,14 +35,14 @@ namespace ContactManagement.Models.Validators
             }
             else
             {
-                string phoneRegex = @"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}";
+                string phoneRegex = @"^\d{3}\d{3}\d{4}$";
 
                 Regex re = new Regex(phoneRegex);
 
                 if (!re.IsMatch(contactModel.Phone))
                 {
                     //Controller.ModelState.AddModelError("Phone", "Phone Number is not valid");
-                    tuple = new Tuple<string, string>("Phone", "Phone Number is required");
+                    tuple = new Tuple<string, string>("Phone", "Phone Number is not valid");
                     internalValidationErrors.Add(tuple);
                 }
             }
@@ -64,7 +64,7 @@ namespace ContactManagement.Models.Validators
                 if (!re.IsMatch(contactModel.Email))
                 {
                     //Controller.ModelState.AddModelError("Email", "Email Address is not valid");
-                    tuple = new Tuple<string, string>("Email", "Email Address is required");
+                    tuple = new Tuple<string, string>("Email", "Email Address is not valid");
                     internalValidationErrors.Add(tuple);
                 }
             }

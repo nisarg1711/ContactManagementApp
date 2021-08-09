@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -18,14 +19,23 @@ namespace ContactManagement.Data.Providers
         /// <returns></returns>
         public int SaveContact(ContactDetail contactDetail)
         {
+            int rowsCommitted = 0;
+
             ContactDetail existingContactDetail = FindContact(contactDetail?.Id);
 
             if (existingContactDetail == null)
             {
                 contactEntities.ContactDetails.Add(contactDetail);
             }
-         
-            int rowsCommitted = contactEntities.SaveChanges();
+
+            try
+            {
+                rowsCommitted = contactEntities.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             return rowsCommitted;
         }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagement.Data", "C
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ContactManagementDB", "ContactManagementDB\ContactManagementDB.sqlproj", "{FD3BF999-1740-458D-B9D5-2C5FC46542F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagement.UnitTests", "ContactManagement.UnitTests\ContactManagement.UnitTests.csproj", "{5A6BBFC3-B0C1-44AC-A24C-7D22A9703C72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{FD3BF999-1740-458D-B9D5-2C5FC46542F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3BF999-1740-458D-B9D5-2C5FC46542F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD3BF999-1740-458D-B9D5-2C5FC46542F7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5A6BBFC3-B0C1-44AC-A24C-7D22A9703C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A6BBFC3-B0C1-44AC-A24C-7D22A9703C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A6BBFC3-B0C1-44AC-A24C-7D22A9703C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A6BBFC3-B0C1-44AC-A24C-7D22A9703C72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

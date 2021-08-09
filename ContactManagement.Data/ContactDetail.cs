@@ -33,8 +33,7 @@ namespace ContactManagement.Data
         public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> LastUpdated { get; set; }
 
-        [ForeignKey("CompanyId")]
-        [Required]
+        [ForeignKey("CompanyId")]       
         public virtual Company Company { get; set; }
         public virtual ContactDetail ContactDetails1 { get; set; }
         public virtual ContactDetail ContactDetail1 { get; set; }
