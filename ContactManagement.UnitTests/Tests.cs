@@ -1,21 +1,23 @@
 using ContactManagement.Data;
 using ContactManagement.Data.Providers;
+using ContactManagement.Models.Validators;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace ContactManagement.UnitTests
 {
     public class Tests
     {
+        ContactProvider contactProvider;
+
         [SetUp]
         public void Setup()
         {
+            contactProvider = new ContactProvider(new ContactDBEntities());
         }
 
-        private ContactDBEntities contactDBEntities;
-
-        CompanyProvider companyProvider;
-        ContactProvider contactProvider;
+        #region Seed Data
 
         private List<ContactDetail> GetTestContactDetails()
         {
@@ -43,11 +45,11 @@ namespace ContactManagement.UnitTests
             return testCompanies;
         }
 
+        #endregion
+
         [Test]
         public void IsContactSaved()
         {
-            var controller = new Controllers.ContactController();
-
             ContactDetail contactDetail = new ContactDetail();
             contactDetail.Id = 1;
             contactDetail.ContactName = "Nisarg";
@@ -58,11 +60,31 @@ namespace ContactManagement.UnitTests
             contactDetail.Email = "test@gmail.com";
             contactDetail.Comments = "test";
 
-            controller.Create(contactDetail);
+            int result = contactProvider.SaveContact(contactDetail);
 
-            //int result = contactProvider.SaveContact(contactDetail);
+            Assert.True(result > 0, "Contact could not be saved");
+        }
 
-            //Assert.IsTrue(result > 0, "Contact could not be saved");
+        public void ValidInputs()
+        {
+            var controller = new Controllers.ContactController();
+            List<Tuple<string, string>> internalValidationErrors;
+
+            ContactDetailsValidator validator = new ContactDetailsValidator(controller);
+            
+            ContactDetail contactDetail = new ContactDetail();
+            contactDetail.Id = 1;
+            contactDetail.ContactName = "Nisarg";
+            contactDetail.CompanyId = 1;
+            contactDetail.JobTitle = "Development Team Lead";
+            contactDetail.Address = "Nolanhill";
+            contactDetail.Phone = "4035551111";
+            contactDetail.Email = "test@gmail.com";
+            contactDetail.Comments = "test";
+
+            validator.ValidateInputs(contactDetail, out internalValidationErrors);            
+
+            Assert.True(internalValidationErrors.Count == 0, "Input fields validation failed.");
         }
     }
 

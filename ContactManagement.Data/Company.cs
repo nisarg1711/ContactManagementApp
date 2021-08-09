@@ -11,9 +11,7 @@ namespace ContactManagement.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class Company
     {
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,11 +19,10 @@ namespace ContactManagement.Data
         //{
         //    this.ContactDetails = new HashSet<ContactDetail>();
         //}
-                
-        [Key, ForeignKey("ContactDetails")]
+    
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
-                
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContactDetail> ContactDetails { get; set; }
     }

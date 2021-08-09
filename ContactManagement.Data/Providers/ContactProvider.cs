@@ -25,6 +25,8 @@ namespace ContactManagement.Data.Providers
 
             if (existingContactDetail == null)
             {
+                contactDetail.IsActive = true;
+                contactDetail.LastUpdated = DateTime.Now;
                 contactEntities.ContactDetails.Add(contactDetail);
             }
 
@@ -42,6 +44,8 @@ namespace ContactManagement.Data.Providers
 
         public ContactDetail UpdateContactDetails(ContactDetail contactDetail)
         {
+            contactDetail.IsActive = true;
+            contactDetail.LastUpdated = DateTime.Now;
             contactEntities.Entry(contactDetail).State = EntityState.Modified;
             contactEntities.SaveChanges();
 

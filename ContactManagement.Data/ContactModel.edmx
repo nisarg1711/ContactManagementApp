@@ -25,7 +25,7 @@
           <Property Name="Email" Type="varchar" MaxLength="70" Nullable="false" />
           <Property Name="LastDateContacted" Type="date" />
           <Property Name="Comments" Type="varchar" MaxLength="200" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <Association Name="FK_ContactDetails_Company">
@@ -73,7 +73,7 @@
           <Property Name="Email" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastDateContacted" Type="DateTime" Precision="0" />
           <Property Name="Comments" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="LastUpdated" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Company" Relationship="Self.FK_ContactDetails_Company" FromRole="ContactDetails" ToRole="Company" />
           <NavigationProperty Name="ContactDetails1" Relationship="Self.FK_ContactDetails_ContactDetails" FromRole="ContactDetails" ToRole="ContactDetails1" />

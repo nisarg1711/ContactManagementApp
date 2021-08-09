@@ -19,17 +19,16 @@ namespace ContactManagement.Data
             : base("ContactDBEntities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ContactDetail>().HasKey(x => new { x.Id});
-            //modelBuilder.Entity<ContactDetail>()
-            //.HasOptional(p => p.Company)
-            //.WithOptionalPrincipal(o => o.CompanyId)
-            //.Map(x => x.MapKey("CompanyId"));
-        }
+            modelBuilder.Entity<ContactDetail>().HasRequired(contact => contact.Company)
+                                   .WithRequiredPrincipal();
 
+   
+            base.OnModelCreating(modelBuilder);
+        }
+    
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<ContactDetail> ContactDetails { get; set; }
     }
