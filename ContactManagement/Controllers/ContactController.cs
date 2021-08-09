@@ -1,8 +1,12 @@
 ﻿using ContactManagement.Data;
 using ContactManagement.Data.Providers;
+using ContactManagement.ExtensionMethods;
+using ContactManagement.Models.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ContactManagement.Controllers
@@ -39,57 +43,44 @@ namespace ContactManagement.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ContactDetail contactModel)
         {
-            if (string.IsNullOrEmpty(contactModel.ContactName))
-            {
-                ModelState.AddModelError("ContactName", "Contact Name is required");
-            }
+            ContactDetailsValidator contactDetailsValidator = new ContactDetailsValidator(this);
 
-            if (string.IsNullOrEmpty(contactModel.JobTitle))
-            {
-                ModelState.AddModelError("JobTitle", "Job Title is required");
-            }
-                   
-            if (!string.IsNullOrEmpty(contactModel.Email))
-            {
-                string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                                         @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                                            @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            List<Tuple<string, string>> validationErrors = new List<Tuple<string, string>>();
 
-                Regex re = new Regex(emailRegex);
+            ModelState.RequiredField(() => contactModel.ContactName);
 
-                if (!re.IsMatch(contactModel.Email))
+            ModelState.RequiredField(() => contactModel.JobTitle);
+
+            contactDetailsValidator.ValidateInputs(contactModel, out validationErrors);
+
+            foreach (var error in validationErrors)
+            {
+                if (ModelState.ContainsKey(error.Item1))
                 {
-                    ModelState.AddModelError("Email", "Email Address is not valid");
+                    ModelState.Remove(error.Item1);
                 }
-            }
-            else
-            {
-                ModelState.AddModelError("Email", "Email Address is required");
-            }
 
-            if (!string.IsNullOrEmpty(contactModel.Phone))
-            {
-                string emailRegex = @"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}";
-
-                Regex re = new Regex(emailRegex);
-
-                if (!re.IsMatch(contactModel.Phone))
-                {
-                    ModelState.AddModelError("Phone", "Phone Number is not valid");
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("Phone", "Phone Number is required");
+                ModelState.AddModelError(error.Item1, error.Item2);
             }
 
             if (ModelState.IsValid)
             {
-                contactProvider.SaveContact(contactModel);
+                int result = contactProvider.SaveContact(contactModel);
+
+                if (result > 0)
+                {
+                    ViewBag.Alert = "Contact details saved successfully";
+                }
+                else
+                {
+                    ViewBag.Alert = "Contact details could not be saved due to unknown error";
+                }
+
                 return RedirectToAction("Index");
             }
-            TempData["CompanyList"] = new SelectList(companyProvider.GetCompanyList(), "CompanyId", "CompanyName");
 
+            TempData["CompanyList"] = new SelectList(companyProvider.GetCompanyList(), "CompanyId", "CompanyName");
+                      
             return View(contactModel);
         }
 
@@ -124,7 +115,7 @@ namespace ContactManagement.Controllers
             }
             catch
             {
-                
+
             }
 
             return View();
